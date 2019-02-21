@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Game renders correctly 1`] = `
+<div
+  className="Game"
+>
+  <p
+    className="Message"
+  >
+    Turn: undefined
+  </p>
+  <div
+    className="Restart IsDisabled"
+    onClick={[Function]}
+    role="button"
+  >
+    Restart.
+  </div>
+  <div
+    className="Board"
+  />
+</div>
+`;

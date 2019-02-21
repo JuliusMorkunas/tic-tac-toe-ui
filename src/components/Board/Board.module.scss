@@ -1,0 +1,33 @@
+@import '../../variables';
+
+.Board,
+.Row,
+.Cell {
+  display: flex;
+}
+
+.Board {
+  flex-direction: column;
+}
+
+.Row {
+  justify-content: flex-start;
+}
+
+.Cell {
+  font-weight: 600;
+  width: 5rem;
+  height: 5rem;
+  border: 1px solid;
+
+  span {
+    display: flex;
+    margin: auto;
+  }
+}
+
+.Winner {
+  background-color: $c-white;
+  color: $c-dark-blue;
+  border-color: $c-white;
+}

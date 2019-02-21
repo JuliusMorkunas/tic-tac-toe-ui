@@ -1,0 +1,18 @@
+@import '../../variables';
+
+.Restart {
+  display: block;
+  text-decoration: underline;
+  margin-bottom: 2rem;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+
+.IsDisabled {
+  color: $c-grey;
+  text-decoration: none;
+  pointer-events: none;
+}
