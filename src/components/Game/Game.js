@@ -5,7 +5,7 @@ import Reset from '../Reset';
 import Board from '../Board';
 import ActionLog from '../ActionLog';
 
-const Game = ({ board, turn, winner, draw, actions = [], playerAction, resetGame }) => {
+const Game = ({ isLoaded, board, turn, winner, draw, actions = [], playerAction, resetGame }) => {
   const handlePlayerAction = ({ row, cell }) => {
     !board[row][cell] && !winner && playerAction({ player: turn, row, cell });
   };

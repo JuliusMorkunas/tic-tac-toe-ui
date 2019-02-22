@@ -6,7 +6,10 @@ import Message from '../../components/Message';
 
 const Game = lazy(() => import('../../components/Game'));
 
+const Loading = <Message message="Getting ready..." />;
+
 export const App = ({
+  isLoaded,
   board,
   turn,
   winner = null,
@@ -24,16 +27,21 @@ export const App = ({
 
   return (
     <div className={s.App}>
-      <Suspense fallback={<Message message="Getting ready..." />}>
-        <Game
-          board={board}
-          turn={turn}
-          winner={winner}
-          draw={draw}
-          actions={actions}
-          playerAction={playerAction}
-          resetGame={resetGame}
-        />
+      <Suspense fallback={Loading}>
+        {isLoaded ? (
+          <Game
+            isLoaded={isLoaded}
+            board={board}
+            turn={turn}
+            winner={winner}
+            draw={draw}
+            actions={actions}
+            playerAction={playerAction}
+            resetGame={resetGame}
+          />
+        ) : (
+          Loading
+        )}
       </Suspense>
     </div>
   );
@@ -41,6 +49,7 @@ export const App = ({
 
 const ConnectedApp = connect(
   ({ game }) => ({
+    isLoaded: game.isLoaded,
     board: game.board,
     turn: game.turn,
     winner: game.winner,

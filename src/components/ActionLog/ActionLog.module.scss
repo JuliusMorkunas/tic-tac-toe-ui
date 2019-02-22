@@ -1,7 +1,13 @@
+@import '../../variables';
+
 .ActionsLog {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   list-style: none;
   padding-left: 0;
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.Time {
+  color: $c-grey;
 }

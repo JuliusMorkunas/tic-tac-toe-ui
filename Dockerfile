@@ -1,6 +1,8 @@
 # Stage 1 - the build process
 FROM node:8.12 as build
 WORKDIR /usr/app
+# TODO: Services needs to be properly connected
+ENV REACT_APP_API_URL=http://localhost:8000
 COPY . ./
 RUN yarn
 RUN yarn build

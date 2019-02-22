@@ -1,6 +1,8 @@
-# BA Weather
+# Tic Tac Toe
 
-Tic Tac Toe game client app
+[![License][license-badge]][license-url]
+
+> Tic Tac Toe game client app
 
 ## Installing / Getting started
 
@@ -38,9 +40,19 @@ yarn build
 
 #### In docker container:
 
+Building an image
 ```shell
-docker build --tag=tic-tac-toe-ui .
-docker run -p 80:80 tic-tac-toe-ui
+$ docker-compose build
+```
+
+Running a container
+```shell
+$ docker-compose up
+```
+
+Stopping a container
+```shell
+$ docker-compose down
 ```
 
 ### Deploying / Publishing
@@ -63,10 +75,11 @@ Using [Prettier](https://prettier.io/) to simplify code formatting. [See why.](h
 
 ## Api Reference
 
-[OpenWeatherMap API documentation](https://openweathermap.org/current)
-
-[IPData.co API documentation](https://ipdata.co/docs.html)
+[Tic Tac Toe Action Logging API](https://github.com/julykaz/tic-tac-toe-api)
 
 ## Licensing
 
 MIT License
+
+[license-badge]: https://img.shields.io/github/license/robertoachar/docker-express-mongodb.svg
+[license-url]: https://opensource.org/licenses/MIT

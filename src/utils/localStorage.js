@@ -1,12 +1,15 @@
 import { STORAGE_KEY, BOARD_CELLS_COUNT } from './constants';
+import { getBoardFromActionLog } from './logic';
 
 const logAction = action => {
   const currentGameActionsString = localStorage.getItem(STORAGE_KEY);
   try {
     const currentGameActions = currentGameActionsString ? JSON.parse(currentGameActionsString) : [];
-    const nextGameActions = Array.isArray(currentGameActions)
+    const currentBoard = getBoardFromActionLog(currentGameActions);
+    const isCellOccupied = currentBoard[action.row][action.cell];
+    const nextGameActions = !isCellOccupied
       ? [...currentGameActions, action]
-      : [action];
+      : [...currentGameActions];
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextGameActions));
     return nextGameActions;
   } catch {

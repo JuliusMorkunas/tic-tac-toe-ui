@@ -4,7 +4,6 @@ import api from '../../utils/api';
 import { PLAYER_1_SYMBOL, PLAYER_2_SYMBOL } from '../../utils/constants';
 
 // Actions
-const PLAYER_ACTION = 'ttt/game/PLAYER_ACTION';
 const RESET_GAME = 'ttt/game/RESET_GAME';
 const RESET_GAME_SUCCESS = 'ttt/game/RESET_GAME_SUCCESS';
 const RESET_GAME_FAILURE = 'ttt/game/RESET_GAME_FAILURE';
@@ -16,6 +15,7 @@ const LOG_ACTION_SUCCESS = 'ttt/game/LOG_ACTION_SUCCESS';
 const LOG_ACTION_FAILURE = 'ttt/game/LOG_ACTION_FAILURE';
 
 export const initialState = {
+  isLoaded: false,
   board: getEmptyBoard(),
   turn: PLAYER_1_SYMBOL,
   winner: null,
@@ -26,9 +26,9 @@ export const initialState = {
 // Reducer
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case PLAYER_ACTION:
+    case LOG_ACTION_SUCCESS:
     case GET_ACTIONS_SUCCESS: {
-      const { board, turn, winner, draw, actions } = action;
+      const { board, turn, winner, draw, actions, isLoaded = true } = action;
       return {
         ...state,
         board,
@@ -36,14 +36,19 @@ export default function reducer(state = initialState, action = {}) {
         winner,
         draw,
         actions,
+        isLoaded,
       };
     }
-    case RESET_GAME:
-      return initialState;
+    case RESET_GAME_SUCCESS:
+      return {
+        ...initialState,
+        isLoaded: true,
+      };
     case LOG_ACTION:
+    case LOG_ACTION_FAILURE:
     case GET_ACTIONS:
     case GET_ACTIONS_FAILURE:
-    case RESET_GAME_SUCCESS:
+    case RESET_GAME:
     case RESET_GAME_FAILURE:
     default:
       return state;
@@ -51,29 +56,27 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 // Action Creators
-export const playerAction = ({ player, row, cell }) => (dispatch, getState) => {
-  const timestamp = +new Date();
-  const action = { player, row, cell, timestamp };
-  const {
-    game: { board, actions },
-  } = getState();
-  const nextBoard = cloneDeep(board);
-  nextBoard[row][cell] = player;
-  const winner = isWinner({ board: nextBoard, player }) ? player : null;
-  dispatch({
-    type: PLAYER_ACTION,
-    board: nextBoard,
-    winner,
-    turn: player === PLAYER_1_SYMBOL ? PLAYER_2_SYMBOL : PLAYER_1_SYMBOL,
-    actions: [...actions, action],
-    draw: isBoardFull(nextBoard) && !winner,
-  });
+export const playerAction = ({ player, row, cell }) => async (dispatch, getState) => {
   dispatch({
     type: LOG_ACTION,
   });
-  if (api.logAction(action).length) {
+  const timestamp = +new Date();
+  const action = { player, row, cell, timestamp };
+  const isActionLogged = await api.logAction(action);
+  if (isActionLogged) {
+    const {
+      game: { board, actions },
+    } = getState();
+    const nextBoard = cloneDeep(board);
+    nextBoard[row][cell] = player;
+    const winner = isWinner({ board: nextBoard, player }) ? player : null;
     dispatch({
       type: LOG_ACTION_SUCCESS,
+      board: nextBoard,
+      winner,
+      turn: player === PLAYER_1_SYMBOL ? PLAYER_2_SYMBOL : PLAYER_1_SYMBOL,
+      actions: [...actions, action],
+      draw: isBoardFull(nextBoard) && !winner,
     });
   } else {
     dispatch({
@@ -82,11 +85,11 @@ export const playerAction = ({ player, row, cell }) => (dispatch, getState) => {
   }
 };
 
-export const getGameActions = () => dispatch => {
+export const getGameActions = () => async dispatch => {
   dispatch({
     type: GET_ACTIONS,
   });
-  const actions = api.getGameActions();
+  const actions = await api.getGameActions();
   const lastAction = actions.length ? actions[actions.length - 1] : {};
   const { player } = lastAction;
   const board = getBoardFromActionLog(actions);
@@ -99,14 +102,16 @@ export const getGameActions = () => dispatch => {
     winner,
     draw: isBoardFull(board) && !winner,
     actions,
+    isLoaded: true,
   });
 };
 
-export const resetGame = () => dispatch => {
+export const resetGame = () => async dispatch => {
   dispatch({
     type: RESET_GAME,
   });
-  if (api.resetGame()) {
+  const isResetSuccessful = await api.resetGame();
+  if (isResetSuccessful) {
     dispatch({
       type: RESET_GAME_SUCCESS,
     });

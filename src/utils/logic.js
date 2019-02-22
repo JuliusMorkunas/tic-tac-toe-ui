@@ -1,7 +1,5 @@
 import reduce from 'lodash/reduce';
-
-const EMPTY_CELL = '';
-const BOARD_CELLS_COUNT = 9;
+import { EMPTY_CELL, BOARD_CELLS_COUNT } from './constants';
 
 const countInRow = (player, row) => row.filter(el => el === player).length;
 const hasWonInRow = (player, row) => countInRow(player, row) === 3;
@@ -57,9 +55,9 @@ export const getEmptyBoard = () => {
   };
 };
 
-export const getBoardFromActionLog = actions => {
+export const getBoardFromActionLog = (actions = []) => {
   const emptyBoard = getEmptyBoard();
-  if (!actions || actions >= BOARD_CELLS_COUNT) {
+  if (!actions || actions.length > BOARD_CELLS_COUNT) {
     return emptyBoard;
   }
   return reduce(

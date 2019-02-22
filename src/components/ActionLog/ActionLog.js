@@ -7,7 +7,10 @@ const ActionLog = ({ actions = [] }) => {
       <ul className={s.ActionsLog}>
         {actions.map(({ timestamp, player, row, cell }, i) => (
           <li key={i}>
-            {new Date(timestamp).toLocaleTimeString()}: {player} marked {row + 1},{cell + 1}
+            <span className={s.Time}>{new Date(timestamp).toLocaleTimeString()}:</span>{' '}
+            <span>
+              {player} marked {row + 1},{cell + 1}
+            </span>
           </li>
         ))}
       </ul>

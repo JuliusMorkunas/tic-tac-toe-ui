@@ -1,0 +1,32 @@
+version: '3'
+
+# TODO: Services needs to be properly connected
+services:
+  ttt-ui:
+    container_name: ttt-ui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    links:
+      - ttt-api
+
+  ttt-api:
+    container_name: ttt-api
+    build: https://github.com/julykaz/tic-tac-toe-api.git
+    ports:
+      - '8000:8000'
+    networks:
+      - app-network
+    links:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
