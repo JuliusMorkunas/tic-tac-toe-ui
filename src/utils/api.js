@@ -35,6 +35,7 @@ const logAction = async action => {
 };
 
 const resetGame = async () => {
+  ls.resetGame();
   if (API_URL) {
     try {
       const actions = await fetch(API_URL + '/api/actions', { method: 'DELETE' })
@@ -43,11 +44,9 @@ const resetGame = async () => {
       return !actions.length;
     } catch {
       // Fallback to localStorage
-      ls.resetGame();
       return true;
     }
   }
-  ls.resetGame();
   return true;
 };
 
