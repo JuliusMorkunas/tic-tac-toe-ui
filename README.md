@@ -38,21 +38,10 @@ yarn start
 yarn build
 ```
 
-#### In docker container:
+#### In docker containers:
 
-Building an image
 ```shell
-$ docker-compose build
-```
-
-Running a container
-```shell
-$ docker-compose up
-```
-
-Stopping a container
-```shell
-$ docker-compose down
+$ docker-compose up --build
 ```
 
 ### Deploying / Publishing
